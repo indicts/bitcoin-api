@@ -94,15 +94,11 @@ async def unconfirmed_handler():
 
 def run_confirmed_handler():
     asyncio.run(unconfirmed_handler())
+confirmed_thread = threading.Thread(target=run_confirmed_handler).start()
 
 def run_unconfirmed_handler():
     asyncio.run(confirmed_handler())
-
-confirmed_thread = threading.Thread(target=run_confirmed_handler)
-unconfirmed_thread = threading.Thread(target=run_unconfirmed_handler)
-
-confirmed_thread.start()
-unconfirmed_thread.start()
+unconfirmed_thread = threading.Thread(target=run_unconfirmed_handler).start()
 
 @app.route('/create')
 def create():
@@ -116,8 +112,8 @@ def create():
     if TESTING == False:
         private_key = PrivateKey()
     else:
-        
         private_key = PrivateKeyTestnet()
+        
     private_key_str = private_key.to_wif()
 
     res = {
@@ -155,5 +151,4 @@ def status():
     else:
         return jsonify({'error': 'Invoice ID not found!'}), 404
 
-if __name__ == "__main__":
-    app.run()
+app.run()
