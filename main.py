@@ -92,13 +92,8 @@ async def unconfirmed_handler():
                             print(f"Unconfirmed tx detected: {Fore.LIGHTBLUE_EX + str(txid) + Fore.RESET}")
                             update_status(invoice["invoice_id"], "unconfirmed", txid)
 
-def run_confirmed_handler():
-    asyncio.run(unconfirmed_handler())
-confirmed_thread = threading.Thread(target=run_confirmed_handler).start()
-
-def run_unconfirmed_handler():
-    asyncio.run(confirmed_handler())
-unconfirmed_thread = threading.Thread(target=run_unconfirmed_handler).start()
+threading.Thread(target=lambda: asyncio.run(unconfirmed_handler())).start()
+threading.Thread(target=lambda: asyncio.run(confirmed_handler())).start()
 
 @app.route('/create')
 def create():
