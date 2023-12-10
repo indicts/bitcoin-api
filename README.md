@@ -57,7 +57,7 @@ GET /status?invoice_id=generated_invoice_id
 ```json
 {
   "status": "unconfirmed", <- can also be confirmed, waiting, or completed
-  "txid": "confirmed_transaction_id"
+  "txid": "confirmed_transaction_id" <- will only show if status is confirmed
 }
 ```
 # Important Considerations
